@@ -141,5 +141,19 @@ namespace MyRecordingApp
             Array.Copy(origin, shiftOffset, origin, 0, length - shiftOffset);
             return origin;
         }
+
+        public static string GetCapturedVideoDirectoryPath()
+        {
+            string videoDirPath = Directory.GetCurrentDirectory() + "//CapturedVideos";
+            if(!Directory.Exists(videoDirPath))
+            {
+                Directory.CreateDirectory(videoDirPath);
+            }
+            return videoDirPath;
+        }
+        public static string CreateFileNameFromCurrentMoment(string extension)
+        {
+            return DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + extension;
+        }
     }
 }

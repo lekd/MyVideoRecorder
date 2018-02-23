@@ -1,5 +1,6 @@
 ﻿
 
+using Accord.Video.FFMPEG;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,7 +31,7 @@ namespace MyRecordingApp
         int selectedDeviceIndex = -1;
         GenericCaptureDevice captureDevice = null;
 
-        //VideoFileWriter videoWriter = null;
+        VideoFileWriter videoWriter = new VideoFileWriter();
         public MainWindow()
         {
             InitializeComponent();
@@ -42,10 +43,11 @@ namespace MyRecordingApp
         void PositionWindowInStartupScreen()
         {
             Screen startupScreen = Screen.AllScreens[Properties.Settings.Default.StartupScreen];
-            this.Left = startupScreen.WorkingArea.Left;
-            this.Top = startupScreen.WorkingArea.Top;
-            this.Width = startupScreen.WorkingArea.Width;
-            this.Height = startupScreen.WorkingArea.Height;
+            this.Left = startupScreen.Bounds.Left;
+            this.Top = startupScreen.Bounds.Top;
+            this.Width = startupScreen.WorkingArea.Width*2/3;
+            this.Height = startupScreen.WorkingArea.Height*3/5;
+            this.WindowState = WindowState.Maximized;
         }
         void initCapturePanelControls()
         {
@@ -131,10 +133,16 @@ namespace MyRecordingApp
         {
             Action displayFrame = delegate
             {
+                if (chb_FlipFrame.IsChecked == true)
+                {
+                    bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                }
                 img_Preview.Source = Utilities.ToBitmapImage(bmp, ImageFormat.Jpeg);
+                Bitmap buf = new Bitmap(bmp);
+                
                 if(isVideoRecording)
                 {
-                    //videoWriter.WriteVideoFrame(bmp);
+                    videoWriter.WriteVideoFrame(buf);
                 }
             };
             img_Preview.Dispatcher.Invoke(displayFrame);
@@ -153,12 +161,21 @@ namespace MyRecordingApp
             if(isVideoRecording)
             {
                 btn_Record.Content = "Stop";
-                //videoWriter.Open("E://test.mp4", currentFrame.Width, currentFrame.Height, 25, VideoCodec.MPEG4);
+                if (selectedDeviceType.CompareTo(DeviceTypes[0]) == 0)
+                {
+                    videoWriter.Open(Utilities.GetCapturedVideoDirectoryPath() + "//" + Utilities.CreateFileNameFromCurrentMoment(".mp4"),
+                                   currentFrame.Width, currentFrame.Height, 8, VideoCodec.MPEG4);
+                }
+                else if (selectedDeviceType.CompareTo(DeviceTypes[1]) == 0)
+                {
+                    videoWriter.Open(Utilities.GetCapturedVideoDirectoryPath() + "//" + Utilities.CreateFileNameFromCurrentMoment(".mp4"),
+                                   currentFrame.Width, currentFrame.Height, 20, VideoCodec.MPEG4);
+                }
             }
             else
             {
                 btn_Record.Content = "Record";
-                //videoWriter.Close();
+                videoWriter.Close();
             }
         }
         #endregion

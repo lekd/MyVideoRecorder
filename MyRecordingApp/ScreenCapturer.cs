@@ -22,7 +22,7 @@ namespace MyRecordingApp
         public override void Start()
         {
             frameAquireScheduler = new Timer();
-            frameAquireScheduler.Interval = 40;
+            frameAquireScheduler.Interval = 1;
             frameAquireScheduler.Enabled = true;
             frameAquireScheduler.Tick += FrameAquireScheduler_Tick;
             frameAquireScheduler.Start();

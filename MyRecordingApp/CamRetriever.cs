@@ -12,7 +12,7 @@ namespace MyRecordingApp
     
     public class CamRetriever : GenericCaptureDevice
     {
-        const int UPDATE_INTERVAL = 40;
+        const int UPDATE_INTERVAL = 20;
         
         protected VideoCapture camCapture;
         private DateTime lastUpdate;

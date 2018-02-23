@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Closing="Window_Closing"
         Loaded="Window_Loaded"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="500" Width="1000">
     <Grid x:Name="grid_GeneralContainer">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.6*"></ColumnDefinition>
@@ -33,13 +33,8 @@
             <ComboBox x:Name="cb_DeviceID" Grid.Column="1" Grid.Row="0" MinWidth="300"
                   VerticalAlignment="Center" HorizontalAlignment="Center"
                   SelectionChanged="cb_DeviceID_SelectionChanged"></ComboBox>
-            <Grid Grid.Column="1" Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="btn_Record" Grid.Column="0" FontSize="24" Click="btn_Record_Click" Margin="5 5 5 5">Record</Button>
-            </Grid>
+            <CheckBox x:Name="chb_FlipFrame" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="50 0 10 0" Foreground="White" FontSize="18">Flip frame</CheckBox>
+            <Button x:Name="btn_Record" Grid.Column="1" Grid.Row="2" FontSize="24" Click="btn_Record_Click" HorizontalAlignment="Center" Padding="50 0 50 0" Margin="0 10 0 10">Record</Button>
         </Grid>
         <Grid x:Name="playerRemoteControlPanelContainer" Grid.Column="1">
             <Grid.RowDefinitions>
