@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,11 +33,14 @@ namespace MyRecordingApp
         GenericCaptureDevice captureDevice = null;
 
         VideoFileWriter videoWriter = new VideoFileWriter();
+        MediaPlayer playerWindow = null;
         public MainWindow()
         {
             InitializeComponent();
             PositionWindowInStartupScreen();
             initDeviceTypes();
+
+            loadMyVideoList();
         }
         
         #region UI control initialization
@@ -61,6 +65,7 @@ namespace MyRecordingApp
         {
             captureDevice?.Close();
             captureDevice = null;
+            playerWindow?.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -97,6 +102,7 @@ namespace MyRecordingApp
             cb_DeviceID.ItemsSource = capturingDevices;
         }
         #endregion
+        #region capture panel
         private void cb_CaptureDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selectedDeviceType = DeviceTypes[cb_CaptureDevice.SelectedIndex];
@@ -148,6 +154,48 @@ namespace MyRecordingApp
             img_Preview.Dispatcher.Invoke(displayFrame);
             currentFrame = bmp;
         }
+        #endregion
+        #region player remote control panel
+        string selectedVideoName = "";
+        void loadMyVideoList()
+        {
+            DirectoryInfo d = new DirectoryInfo(Utilities.GetMyVideosDirectoryPath());
+            FileInfo[] files = d.GetFiles("*.mp4");
+            string[] fileNames = new string[files.Length];
+            for(int i=0; i<files.Length; i++)
+            {
+                fileNames[i] = files[i].Name;
+            }
+            lb_VideosList.ItemsSource = fileNames;
+        }
+        private void lb_VideosList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedVideoName = (string)(lb_VideosList.SelectedItem);
+        }
+        #endregion
+        #region Player Window Event Handler
+        private void PlayerWindow_MediaEndedEventHandler(object sender, RoutedEventArgs e)
+        {
+            btn_PlayVideo.IsEnabled = true;
+        }
+        private void PlayerWindow_progressUpdateEventHandler(object sender, object[] arguments)
+        {
+            Bitmap playerScreenshot = (Bitmap)arguments[0];
+            Action showPlayerScreen = delegate
+            {
+                Bitmap scaledScreenshot = Utilities.DownScaleBitmap(playerScreenshot, 2);
+                img_PlayerScreen.Source = Utilities.ToBitmapImage(scaledScreenshot, ImageFormat.Jpeg);
+            };
+            img_PlayerScreen.Dispatcher.Invoke(showPlayerScreen);
+            double progressPercent = (Double)arguments[1];
+            Bitmap progressBarBmp = Utilities.DrawProgressBar(progressPercent);
+            Action showProgressBar = delegate
+            {
+                img_ProgressBar.Source = Utilities.ToBitmapImage(progressBarBmp, ImageFormat.Png);
+            };
+            img_ProgressBar.Dispatcher.Invoke(showProgressBar);
+        }
+        #endregion
         #region buttons events
         bool isVideoRecording = false;
         private void btn_Record_Click(object sender, RoutedEventArgs e)
@@ -161,6 +209,7 @@ namespace MyRecordingApp
             if(isVideoRecording)
             {
                 btn_Record.Content = "Stop";
+                setButtonTextColor(btn_Record, false);
                 if (selectedDeviceType.CompareTo(DeviceTypes[0]) == 0)
                 {
                     videoWriter.Open(Utilities.GetCapturedVideoDirectoryPath() + "//" + Utilities.CreateFileNameFromCurrentMoment(".mp4"),
@@ -176,8 +225,53 @@ namespace MyRecordingApp
             {
                 btn_Record.Content = "Record";
                 videoWriter.Close();
+                setButtonTextColor(btn_Record, true);
             }
         }
+        private void btn_ShowPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            if(playerWindow == null)
+            {
+                playerWindow = new MediaPlayer();
+                playerWindow.MediaEndedEventHandler += PlayerWindow_MediaEndedEventHandler;
+                playerWindow.Show();
+                btn_ShowPlayer.Content = "Close Player";
+                btn_PlayVideo.IsEnabled = true;
+                setButtonTextColor(btn_ShowPlayer, false);
+            }
+            else
+            {
+                playerWindow.Close();
+                playerWindow = null;
+                btn_ShowPlayer.Content = "Open Player";
+                btn_PlayVideo.IsEnabled = false;
+                setButtonTextColor(btn_ShowPlayer, true);
+            }
+        }
+        private void btn_PlayVideo_Click(object sender, RoutedEventArgs e)
+        {
+            if (selectedVideoName != "")
+            {
+                playerWindow.progressUpdateEventHandler += PlayerWindow_progressUpdateEventHandler;
+                playerWindow?.Play(Utilities.GetMyVideosDirectoryPath() + "//" + selectedVideoName);
+                btn_PlayVideo.IsEnabled = false;
+            }
+        }
+
         #endregion
+        
+        void setButtonTextColor(System.Windows.Controls.Button btn, bool isIdle)
+        {
+            if(isIdle)
+            {
+                btn.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 0, 255));
+            }
+            else
+            {
+                btn.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0));
+            }
+        }
+        
+
     }
 }

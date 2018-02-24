@@ -151,9 +151,52 @@ namespace MyRecordingApp
             }
             return videoDirPath;
         }
+        public static string GetMyVideosDirectoryPath()
+        {
+            string videoDirPath = Directory.GetCurrentDirectory() + "//MyVideos";
+            if (!Directory.Exists(videoDirPath))
+            {
+                Directory.CreateDirectory(videoDirPath);
+            }
+            return videoDirPath;
+        }
         public static string CreateFileNameFromCurrentMoment(string extension)
         {
             return DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss") + extension;
+        }
+        public static Bitmap DrawProgressBar(double progressPercent)
+        {
+            Bitmap bmp = new Bitmap(500, 100);
+            SolidBrush fillBrush = new SolidBrush(Color.Cyan);
+            if(progressPercent == 1)
+            {
+                fillBrush.Color = Color.Red;
+            }
+            SolidBrush blackBrush = new SolidBrush(Color.Black);
+            Pen borderPen = new Pen(fillBrush,2);
+            int padding = 0;
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.FillRectangle(blackBrush, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                g.DrawRectangle(borderPen, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                double progressWidth = progressPercent * (bmp.Width - 2 * padding);
+                g.FillRectangle(fillBrush, new Rectangle(padding, padding,(int)progressWidth , bmp.Height - 2*padding));
+            }
+            return bmp;
+        }
+        public static Image takeScreenshot(System.Windows.UIElement control, int w,int h)
+        {
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(w, h, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(control);
+            JpegBitmapEncoder jpgImage = new JpegBitmapEncoder();
+            jpgImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            Image screenshot = null;
+            using (Stream stream = new MemoryStream())
+            {
+                jpgImage.Save(stream);
+                screenshot = Image.FromStream(stream);
+            }
+            return screenshot;
         }
     }
 }
