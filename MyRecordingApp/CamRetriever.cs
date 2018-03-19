@@ -19,12 +19,15 @@ namespace MyRecordingApp
         public int CamIndex { get; set; }
         public Bitmap CurrentFrame { get; set; }
         public RectangleF CropArea { get; set; }
-        
-        public CamRetriever(int camIndex)
+        public int frameWidth = 640;
+        public int frameHeight = 480;
+        public CamRetriever(int camIndex,int frameW=640,int frameH=480)
         {
             CamIndex = camIndex;
             lastUpdate = DateTime.Now;
             CropArea = new RectangleF(0, 0, 1, 1);
+            frameWidth = frameW;
+            frameHeight = frameH;
         }
         
         public override void Start()
@@ -32,6 +35,8 @@ namespace MyRecordingApp
             if (CamIndex >= 0)
             {
                 camCapture = new VideoCapture(CamIndex);
+                camCapture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameWidth, frameWidth);
+                camCapture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameHeight, frameHeight);
                 if (camCapture != null && camCapture.Ptr != IntPtr.Zero)
                 {
                     camCapture.ImageGrabbed += ProcessFrame;

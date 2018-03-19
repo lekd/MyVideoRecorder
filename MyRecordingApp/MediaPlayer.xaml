@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyRecordingApp"
         mc:Ignorable="d"
-        WindowState="Maximized"
+        WindowStartupLocation="Manual"
+        WindowState="Normal"
         WindowStyle="None"
         Background="Black"
         Title="MediaPlayer" Height="300" Width="300">

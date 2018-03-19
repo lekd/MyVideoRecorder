@@ -31,5 +31,50 @@ namespace MyRecordingApp.Properties {
                 return ((int)(this["StartupScreen"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowPlayerInPrimaryScreen {
+            get {
+                return ((bool)(this["ShowPlayerInPrimaryScreen"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PlayerAutoRepeat {
+            get {
+                return ((bool)(this["PlayerAutoRepeat"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8080")]
+        public int WebSocketPort {
+            get {
+                return ((int)(this["WebSocketPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsListeningToNetwork {
+            get {
+                return ((bool)(this["IsListeningToNetwork"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("AnswerClient5x5.html")]
+        public string AnswerPage {
+            get {
+                return ((string)(this["AnswerPage"]));
+            }
+        }
     }
 }

@@ -50,19 +50,23 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="DirectShowLib-2005">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\DirectShowLib-2005.dll</HintPath>
+      <HintPath>Libraries\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.DebuggerVisualizers.VS2015">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\Emgu.CV.DebuggerVisualizers.VS2015.dll</HintPath>
+      <HintPath>..\..\HttpPanoVideoStreamingServer\HttpPanoVideoStreamingServer\Libraries\Emgu.CV.DebuggerVisualizers.VS2015.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.UI">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\Emgu.CV.UI.dll</HintPath>
+      <HintPath>Libraries\Emgu.CV.UI.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.UI.GL">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\Emgu.CV.UI.GL.dll</HintPath>
+      <HintPath>Libraries\Emgu.CV.UI.GL.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.World">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\Emgu.CV.World.dll</HintPath>
+      <HintPath>Libraries\Emgu.CV.World.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -79,14 +83,18 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.32519, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp-NonPreRelease.1.0.0\lib\net35\websocket-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="YLScsDrawing">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\YLScsDrawing.dll</HintPath>
+      <HintPath>Libraries\YLScsDrawing.dll</HintPath>
     </Reference>
     <Reference Include="ZedGraph">
-      <HintPath>..\..\SatelliteClientApp\SatelliteClientApp\Libraries\ZedGraph.dll</HintPath>
+      <HintPath>Libraries\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -95,11 +103,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GenericCaptureDevice.cs" />
+    <Compile Include="LogConfigDialog.xaml.cs">
+      <DependentUpon>LogConfigDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MediaPlayer.xaml.cs">
       <DependentUpon>MediaPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScreenCapturer.cs" />
+    <Compile Include="TestLogging\Logger.cs" />
+    <Compile Include="TestLogging\LogRecord.cs" />
     <Compile Include="Utilities.cs" />
+    <Page Include="LogConfigDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
